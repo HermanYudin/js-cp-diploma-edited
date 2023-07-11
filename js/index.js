@@ -12,10 +12,13 @@ function updateCalendar() {
     };
 
     const pageNavDay = document.querySelectorAll('.page-nav__day');
+    let navDay = new Date()
+        navDay = Number(navDay.getDate())
 
-    pageNavDay.forEach((element) => {
-        element.dataset.dayTimeStamp = nextDay.setHours(0, 0, 0, 0);
-
+    pageNavDay.forEach((element, index) => {
+    
+    element.dataset.dayTimeStamp = nextDay.setHours(0, 0, 0, 0);
+ 
         let dayWeek = nextDay.getDay();
         let dayWeekText = nextDay.toLocaleDateString('ru-RU', options);
 
@@ -30,7 +33,11 @@ function updateCalendar() {
         } else {
             element.classList.remove('page-nav__day_weekend');
         }
-
+        if (navDay === navDay+index) {
+            element.dataset.dayTimeStamp = nextDay.setHours(0, 0, 0, 0);
+            element.classList.add('page-nav__day_today');
+            element.classList.add('page-nav__day_chosen');
+        }
         nextDay.setDate(nextDay.getDate() + 1);
     });
 }

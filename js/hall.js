@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const dataOfSS = getJSON('data-of-the-selected-seance');
-    const seanceTT = +dataOfSS.seanceseanceTT / 1000;
+    const timestamp = +dataOfSS.seanceTimeStamp / 1000;
     const hallId = dataOfSS.hallId;
     const seanceId = dataOfSS.seanceId;
-    const request = `event=get_hallConfig&seanceTT=${seanceTT}&hallId=${hallId}&seanceId=${seanceId}`;
+    const request = `event=get_hallConfig&timestamp=${timestamp}&hallId=${hallId}&seanceId=${seanceId}`;
 
     createRequest(request, 'HALL', updateHtmlHall);
 });
@@ -23,20 +23,20 @@ function updateHtmlHall(serverResponse) {
         configSelectedHall = configHalls[dataOfSS.hallId];
     }
 
-    const buyingInfo = document.querySelector('.buying__info');
-    buyingInfo.innerHTML = '';
+    const buyingInfoSection = document.querySelector('.buying__info');
+    buyingInfoSection.innerHTML = '';
 
     const textHtml = `
         <div class='buying__info-description'>
             <h2 class='buying__info-title'>'${dataOfSS.filmName}'</h2>
             <p class='buying__info-start'>Начало сеанса: ${dataOfSS.seanceTime} </br>
-            ${new Date(+dataOfSS.seanceseanceTT).toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+            ${new Date(+dataOfSS.seanceTimeStamp).toLocaleDateString('ru-RU', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
             <p class='buying__info-hall'>${dataOfSS.hallName}</p>
         </div>
         <div class='buying__info-hint'>
             <p>Тапните дважды,<br>чтобы увеличить</p>
         </div>`;
-    buyingInfo.insertAdjacentHTML('beforeend', textHtml);
+    buyingInfoSection.insertAdjacentHTML('beforeend', textHtml);
 
     const confStep = document.querySelector('.conf-step');
     const textHtmlConf = `<div class='conf-step__wrapper'>${configSelectedHall}</div>`;
@@ -58,6 +58,7 @@ function updateHtmlHall(serverResponse) {
     confStep.insertAdjacentHTML('beforeend', textHtmlLegend);
 
     const selectedChairs = [];
+
     const confStepChair = document.querySelectorAll('.conf-step__wrapper .conf-step__chair');
     confStepChair.forEach((element) => {
         element.addEventListener('click', () => {
@@ -141,8 +142,8 @@ function updateHtmlHall(serverResponse) {
                 ...dataOfSS,
                 strRowPlace: strRowPlace,
                 hallNameNumber: dataOfSS.hallName.slice(3).trim(),
-                seanceseanceTTInSec: +dataOfSS.seanceseanceTT / 1000,
-                seanceDay: new Date(+dataOfSS.seanceseanceTT).toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', year: 'numeric' }),
+                seanceTimeStampInSec: +dataOfSS.seanceTimeStamp / 1000,
+                seanceDay: new Date(+dataOfSS.seanceTimeStamp).toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', year: 'numeric' }),
                 totalCost: totalCost,
             };
 
